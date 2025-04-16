@@ -1,15 +1,26 @@
-# Video Streaming Backend
+# Video Streaming Application
 
-This is the backend service for a video streaming application. It provides RESTful APIs for uploading, streaming, and serving videos, including support for HLS (HTTP Live Streaming).
+This project is a full-stack video streaming application that allows users to upload, retrieve, and stream videos. It supports adaptive streaming using HLS (HTTP Live Streaming).
+
+---
 
 ## Features
 
+### Backend
 - **Video Upload**: Upload videos with metadata (title and description).
 - **Retrieve Videos**: Fetch all uploaded videos.
 - **Stream Videos**: Stream videos directly or in chunks.
 - **HLS Support**: Serve HLS playlists (`master.m3u8`) and video segments (`.ts` files).
 
-## Endpoints
+### Frontend
+- **Video Playback**: Play videos using HLS with adaptive streaming.
+- **Video Upload**: Upload videos with a user-friendly interface.
+- **Responsive Design**: Video player adapts to different screen sizes.
+- **Error Handling**: Displays error messages for unsupported formats.
+
+---
+
+## Backend Endpoints
 
 ### 1. Upload Video
 - **URL**: `/api/v1/videos`
@@ -37,8 +48,6 @@ This is the backend service for a video streaming application. It provides RESTf
 - **URL**: `/api/v1/videos/stream/{videoId}`
 - **Method**: `GET`
 - **Description**: Stream a video by its ID.
-- **Path Variable**:
-  - `videoId` (String): The ID of the video to stream.
 - **Response**: Video file as a `Resource`.
 
 ---
@@ -47,10 +56,6 @@ This is the backend service for a video streaming application. It provides RESTf
 - **URL**: `/api/v1/videos/stream/range/{videoId}`
 - **Method**: `GET`
 - **Description**: Stream a video in chunks using the `Range` header.
-- **Path Variable**:
-  - `videoId` (String): The ID of the video to stream.
-- **Request Header**:
-  - `Range` (String): The byte range to stream.
 - **Response**: Partial video file as a `Resource`.
 
 ---
@@ -59,8 +64,6 @@ This is the backend service for a video streaming application. It provides RESTf
 - **URL**: `/api/v1/videos/{videoId}/master.m3u8`
 - **Method**: `GET`
 - **Description**: Serve the HLS master playlist file for a video.
-- **Path Variable**:
-  - `videoId` (String): The ID of the video.
 - **Response**: HLS master playlist file as a `Resource`.
 
 ---
@@ -69,52 +72,59 @@ This is the backend service for a video streaming application. It provides RESTf
 - **URL**: `/api/v1/videos/{videoId}/{segment}.ts`
 - **Method**: `GET`
 - **Description**: Serve individual HLS video segments.
-- **Path Variables**:
-  - `videoId` (String): The ID of the video.
-  - `segment` (String): The segment name.
 - **Response**: HLS video segment file as a `Resource`.
-
-## Configuration
-
-- **HLS Directory**: The directory for storing HLS files is configured using the `file.video.hsl` property in the `application.properties` file.
-- **Chunk Size**: The chunk size for video streaming is defined in [`AppConstants`](src/main/java/com/stream/app/AppConstants.java).
-
-## Dependencies
-
-- **Spring Boot**: For building the REST API.
-- **Lombok**: For reducing boilerplate code.
-- **MultipartFile**: For handling file uploads.
-- **FileSystemResource**: For serving files from the file system.
-- **MediaType**: For setting content types in responses.
-
-## Notes
-
-- Ensure the `HLS_DIR` property is correctly set in the `application.properties` file.
-- The `Range` header is required for chunked video streaming.
-- The controller uses `UUID` to generate unique IDs for videos.
 
 ---
 
-## Project Structure
+## Frontend Components
 
-- **Controllers**: Handles API requests (e.g., `VideoController`).
-- **Entities**: Defines database models (e.g., `Video`, `Course`).
-- **Services**: Contains business logic (e.g., `VideoService`).
-- **Payloads**: Custom response messages (e.g., `CustomMessage`).
+### 1. `VideoPlayer.jsx`
+- A React component for video playback.
+- **Features**:
+  - HLS support using `hls.js`.
+  - Fallback for native HLS playback in compatible browsers.
+  - Error handling for unsupported video formats.
+
+---
+
+### 2. `VideoUpload.jsx`
+- A React component for uploading videos.
+- **Features**:
+  - File upload with metadata (title and description).
+  - Progress bar for upload status.
+  - Success and error notifications using `react-hot-toast`.
+
+---
+
+## Configuration
+
+### Backend
+- **HLS Directory**: Set in `application.properties` using the `file.video.hsl` property.
+- **Chunk Size**: Defined in `AppConstants`.
+
+### Frontend
+- **Video Source**: Pass the HLS playlist URL (`master.m3u8`) to the `VideoPlayer` component.
 
 ---
 
 ## Technologies Used
 
-- **Spring Boot**: Backend framework.
+### Backend
+- **Spring Boot**: REST API development.
 - **Lombok**: Reduces boilerplate code.
-- **JPA**: For database interactions.
-- **HLS**: For adaptive video streaming.
+- **JPA**: Database interactions.
+- **HLS**: Adaptive video streaming.
+
+### Frontend
+- **React**: User interface.
+- **Video.js** and **HLS.js**: Video playback.
+- **Flowbite**: UI components for forms and buttons.
 
 ---
 
 ## How to Run
 
+### Backend
 1. Clone the repository.
 2. Configure the `application.properties` file with the required properties.
 3. Build and run the application using:
